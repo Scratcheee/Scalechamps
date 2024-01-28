@@ -32,10 +32,8 @@ const form = ref({
 
 const handleLogin = async (provider) => {
     try {
-        provider
-        ? await loginWithSocialProvider(provider)
-        : await login(form.value)
-        router.push({name: 'me'})
+        await login(form.value)
+        router.push({name: 'MainScreen'})
     } catch(error) {
         alert(error.message)
     }

@@ -1,25 +1,28 @@
 <script setup>
 import { useFoodLogStore } from './stores/foodlogStore';
+import {useUserInfoStore} from './stores/userInfoStore'
 import { ref, onMounted, computed } from 'vue'
-import { supabase } from './lib/UseSupabase'
 
 const foodLogStore = useFoodLogStore()
+const userInfoStore = useUserInfoStore()
 
 
-  const foodlog = ref([])
 
-  async function getFoodlog() {
-    const { data } = await supabase.from('testfoodlog').select('*')
-    foodlog.value = data
-  }
 
   onMounted(() => {
     foodLogStore.getFoodlog()
+    foodLogStore.getUser()
+    userInfoStore.getUserInfo()
+    userInfoStore.getDailyInputs()
+
   })
 
   const todaysMeals = computed(() => {
-    console.log(foodLogStore.foodlog)
     return foodLogStore.foodlog.filter(obj => obj.date === foodLogStore.currentDate)
+  })
+
+  const todaysCals = computed(() => {
+    return todaysMeals.value.reduce((sum, item) => sum + item.calories, 0);
   })
 </script>
   
@@ -27,35 +30,10 @@ const foodLogStore = useFoodLogStore()
   <div id="nav">
     <!-- <router-link to="/">Home</router-link>
     <router-link to="/setup">Setup</router-link> -->
-    {{ foodLogStore.currentDate }}
-    <!-- {{ foodLogStore.foodlog }} -->
-    <div>
-        <table class="table rounded-xl my-6 ">
-        <thead class="">
-          <tr>
-            <th>Name</th>
-            <th>calories</th>
-            <th>Type</th>
-            <th>hunger</th>
-            <th>date</th> 
-          </tr>
-        </thead>
-        <tbody>
-          <tr v-for="(entry, index) in todaysMeals" :key="index">
-            <td>{{ entry.name }}</td>
-            <td>{{ entry.calories }}</td>
-            <td>{{ entry.type }}</td>
-            <td>{{ entry.hunger }}</td>
-            <td>{{ entry.date }}</td>
 
-
-          </tr>
-        </tbody>
-      </table>
-    </div>
 
   </div>
-  <!-- <router-view></router-view> -->
+  <router-view></router-view>
 </template>
 
 <style scoped>
