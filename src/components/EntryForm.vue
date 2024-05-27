@@ -35,8 +35,10 @@ import Card from 'primevue/card';
 import Button from 'primevue/button';
 import { ref } from 'vue'
 import {useFoodLogStore} from  '../stores/foodlogStore'
+import {useUserInfoStore} from '../stores/userInfoStore'
 
 const foodStore = useFoodLogStore()
+const userStore = useUserInfoStore()
 const food = ref()
 const calories = ref()
 const type = ref()
@@ -47,7 +49,16 @@ const handleSubmit = () => {
     const date = new Date()
     const localTime = date.toLocaleTimeString('en-US', { timeZone: userTimezone });
 
-    foodStore.logEntry({name: food.value, calories: calories.value, type: type.value.toLowerCase(), hunger: hunger.value, time: localTime})
+    // foodStore.logEntry({name: food.value, calories: calories.value, type: type.value.toLowerCase(), hunger: hunger.value, time: localTime})
+    
+    if(!food.value || !calories.value || !type.value || !hunger.value) {
+        console.log('no entry')
+    } else{
+    userStore.submitMeal({name: food.value, calories: calories.value, type: type.value.toLowerCase(), hunger: hunger.value,})
+
+    }
+
+
 }
 
 

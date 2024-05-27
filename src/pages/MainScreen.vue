@@ -1,4 +1,5 @@
 <template>
+            <RouterLink to="/setup"><Button><i class="pi pi-cog"></i></Button></RouterLink>
   <div>
     {{ foodLogStore.currentDate }}
     <br>
@@ -10,7 +11,7 @@
   </div>
   <DailyEntries :dailyInputs="userInfoStore.dailyInputs" :lastEntry="lastEntry" :todaysWeight="todaysWeight" :startingWeight="userInfoStore.userInfo.starting_weight" />
   <EntryForm />
-  <FoodTable :todaysMeals='todaysMeals' />
+  <FoodTable :todaysMeals='lastEntry.meals' />
 </template>
 
 <script setup>
@@ -20,6 +21,8 @@ import { ref, onMounted, computed } from 'vue'
 import FoodTable from '@/components/FoodTable.vue';
 import EntryForm from '@/components/EntryForm.vue';
 import DailyEntries from '@/components/DailyEntries.vue'
+import Button from 'primevue/button';
+
 
 
 const foodLogStore = useFoodLogStore()
@@ -31,27 +34,25 @@ const startingWeight = ref()
 const remainingCals = computed(() => {
   return userInfoStore.userInfo.calorie_goal - todaysCals.value
 })
-const todaysMeals = computed(() => {
-  return foodLogStore.foodlog.filter(obj => obj.date === foodLogStore.currentDate)
-})
+
 const todaysCals = computed(() => {
-  return todaysMeals.value.reduce((sum, item) => sum + item.calories, 0);
+  return userInfoStore.todaysMeals.reduce((sum, item) => sum + item.calories, 0);
 })
 
 
 
 const lastEntry = computed(() => {
-  if (userInfoStore.dailyInputs.length === 0) {
-    return 0
-  } else {
-    const mostRecent = userInfoStore.dailyInputs.filter(entry => entry.date !== foodLogStore.currentDate).reduce((mostRecent, current) => {
-      const mostRecentDate = new Date(mostRecent.date)
-      const currentDate = new Date(current.date)
+  console.log(userInfoStore.currentDate)
+  const todaysEntry = userInfoStore.dailyInputs.filter(entry => entry.date === userInfoStore.currentDate)
 
-      return currentDate > mostRecentDate ? current : mostRecent
-    })
-    return mostRecent
+  if(userInfoStore.dailyInputs.length === 0) {
+    
+    return {}
   }
+   if(todaysEntry.length === 1){
+    return todaysEntry[0]
+  }
+  return {}
 })
 
 const todaysWeight = computed(() => {

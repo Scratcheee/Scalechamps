@@ -11,7 +11,7 @@ const userInfoStore = useUserInfoStore()
 
   onMounted(() => {
     foodLogStore.getFoodlog()
-    foodLogStore.getUser()
+    userInfoStore.getUser()
     userInfoStore.getUserInfo()
     userInfoStore.getDailyInputs()
 
