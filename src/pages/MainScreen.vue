@@ -1,8 +1,6 @@
 <template>
             <RouterLink to="/setup"><Button><i class="pi pi-cog"></i></Button></RouterLink>
   <div>
-    {{ foodLogStore.currentDate }}
-    <br>
     {{ remainingCals }} Remaining
 
 

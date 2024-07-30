@@ -11,6 +11,7 @@ import useAuthUser from './lib/AuthUser'
 
 const app = createApp(App)
 
+
 const routes = [
     {
         path: '/',
@@ -49,7 +50,13 @@ const routes = [
         name: 'Login',
         path: '/login',
         component: () => import('./pages/Login.vue')
-    }
+    },
+    {
+        name: 'Data',
+        path: '/data',
+        component: () => import('./pages/Data.vue')
+
+    },
 ]
 
 const router = createRouter({
